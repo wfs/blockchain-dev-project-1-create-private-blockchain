@@ -16,5 +16,9 @@
     "express": "^4.16.4",
     "hex2ascii": "0.0.3",
     "morgan": "^1.9.1"
+  },
+  "devDependencies": {
+    "arkit": "^1.6.4",
+    "dependency-cruiser": "^11.0.0"
   }
 }

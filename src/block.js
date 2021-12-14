@@ -36,11 +36,12 @@ class Block {
    */
   validate() {
     let self = this;
+    // 1. Return a new promise to allow the method be called asynchronous.
     return new Promise((resolve, reject) => {
-      // Save in auxiliary variable the current block hash
+      // 2. Save the in auxiliary variable the current hash of the block (`this` represent the block object)
       let currentBlockHash = self.hash;
 
-      // Recalculate the hash of the Block
+      // 3. Recalculate the hash of the entire block (Use SHA256 from crypto-js library)
       let blockWithHashRemoved = {
         hash: null,
         height: self.height,
@@ -53,7 +54,8 @@ class Block {
         JSON.stringify(blockWithHashRemoved)
       ).toString();
 
-      // Comparing if the hashes changed
+      // 4. Compare if the auxiliary hash value is different from the calculated one.
+      // 5. Resolve true or false depending if it is valid or not.
       if (currentBlockHash != hashRecalculated) {
         // Block has been changed aka may have been tampered with.
         resolve(false);
@@ -81,11 +83,11 @@ class Block {
       }
       // Getting the encoded data saved in the Block
       let encodedSavedData = this.body;
-      // Decoding the data to retrieve the JSON representation of the object
+      // 1. Using hex2ascii module to decode the data to retrieve the JSON representation of the object
       let decodedJSONData = hex2ascii(encodedSavedData);
-      // Parse the data to an object to be retrieve.
+      // 2. Using JSON.parse(string) to parse the data to an object to be retrieve.
       let dataObject = JSON.parse(decodedJSONData);
-      // Resolve with the data if the object isn't the Genesis block
+      // 3. Resolve with the data if the object isn't the Genesis block
       if (dataObject) {
         resolve(dataObject);
       } else {

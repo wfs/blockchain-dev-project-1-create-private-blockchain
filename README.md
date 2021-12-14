@@ -1,8 +1,20 @@
+# Overview
+
+---
+
+![Alt text](/dependency-graph-html-unhighlighted.png?raw=true "dependency graph html unhighlighted")
+
+```bash
+$ npx dependency-cruiser -v -T dot ./ | dot -T svg | npx depcruise-wrap-stream-in-html > dependency-graph.html
+```
+
 # Project Rubic
 
 ---
 
 ## 1. Complete unfinished block.js implementation
+
+![Alt text](/blocksjs_dependency_graph.png?raw=true "blocks.js dependency graph highlighted")
 
 ### 1.1.1. Criteria
 
@@ -16,6 +28,8 @@ Modify the validate() function to validate if the block has been tampered or not
 - Compare if the auxiliary hash value is different from the calculated one.
 - Resolve true or false depending if it is valid or not.
 
+![Alt text](/blockjs_validate_function.png?raw=true "blocks.js validate function")
+
 ### 1.2.1. Criteria
 
 Modify the 'getBData()' function to return the block body (decoding the data)
@@ -27,9 +41,13 @@ Modify the 'getBData()' function to return the block body (decoding the data)
 
   Resolve with the data and make sure that you don't need to return the data for the genesis block OR reject with an error.
 
+![Alt text](/blockjs_getbdata_function.png?raw=true "blocks.js getbdata function")
+
 ---
 
 ## 2. Complete unfinished blockchain.js implementation
+
+![Alt text](/blockchainjs_dependency_graph.png?raw=true "blockchain.js dependency graph")
 
 ### 2.1.1. Criteria
 
@@ -43,6 +61,8 @@ Modify the '\_addBlock(block)' function to store a block in the chain
   - Create the block hash and push the block into the chain array.
     Don't forget to update the `this.height`
 
+![Alt text](/blockchainjs_private_addblock_function.png?raw=true "blockchain.js private addblock function")
+
 ### 2.2.1. Criteria
 
 Modify 'requestMessageOwnershipVerification(address)' to allow you to request a message that you will use to sign it with your Bitcoin Wallet (Electrum or Bitcoin Core)
@@ -50,6 +70,8 @@ Modify 'requestMessageOwnershipVerification(address)' to allow you to request a 
 ### 2.2.2. Meets Specification
 
 - must return a Promise that will resolve with the message to be signed
+
+![Alt text](/blockchainjs_request_message_ownership_verification_address_param.png?raw=true "blockchain.js request message ownership verification address param")
 
 ### 2.3.1. Criteria
 
@@ -63,13 +85,17 @@ into the chain
 - must verify the message with wallet address and signature: bitcoinMessage.verify(message, address, signature)
 - must create the block and add it to the chain if verification is valid
 
+![Alt text](/blockchainjs_submitstar_function.png?raw=true "blockchain.js submitstar function")
+
 ### 2.4.1. Criteria
 
-Modify the 'getBlockHeight(hash)' function to retrieve a Block based on the hash parameter
+Modify the 'getBlockByHash(hash)' function to retrieve a Block based on the hash parameter
 
 ### 2.4.2. Meets Specification
 
 - must return a Promise that will resolve with the Block
+
+![Alt text](/blockchainjs_get_block_by_hash_function.png?raw=true "blockchain.js get block by hash function")
 
 ### 2.5.1. Criteria
 
@@ -78,6 +104,8 @@ Modify the 'getStarsByWalletAddress (address)' function to return an array of St
 ### 2.5.2. Meets Specification
 
 - must return a Promise that will resolve with an array of the owner address' Stars from the chain
+
+![Alt text](/blockchainjs_get_stars_by_wallet_address_function.png?raw=true "blockchain.js get stars by wallet address function")
 
 ### 2.6.1. Criteria
 
@@ -91,6 +119,8 @@ Modify the 'validateChain()' function
 - execute the `validateChain()` function every time a block is added
 - create an endpoint that will trigger the execution of `validateChain()`
 
+![Alt text](/blockchainjs_validate_chain_function.png?raw=true "blockchain.js validate chain function")
+
 ---
 
 ## 3. Test your App functionality
@@ -102,10 +132,125 @@ Use 'POSTMAN' or similar service to test your blockchains endpoints and send scr
 ### 3.1.2. Meets Specification
 
 - must use a GET call to request the Genesis block
+
+```bash
+$ curl -vo curl_test_output.json localhost:8000/block/height/0
+```
+
+```
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 127.0.0.1:8000...
+* TCP_NODELAY set
+* Connected to localhost (127.0.0.1) port 8000 (#0)
+> GET /block/height/0 HTTP/1.1
+> Host: localhost:8000
+> User-Agent: curl/7.68.0
+> Accept: */*
+>
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< X-Powered-By: Express
+< Content-Type: application/json; charset=utf-8
+< Content-Length: 189
+< ETag: W/"bd-H1cYF2anyJBOp4VxQ9Wpp9SCDAs"
+< Date: Tue, 14 Dec 2021 00:54:23 GMT
+< Connection: keep-alive
+< Keep-Alive: timeout=5
+<
+{ [189 bytes data]
+100   189  100   189    0     0  94500      0 --:--:-- --:--:-- --:--:-- 94500
+* Connection #0 to host localhost left intact
+```
+
+```
+$ cat curl_test_output.json | jq
+{
+  "hash": "628728e502bce709b6ee91a45239653508c3d4225dbf3fa0b2f31f4ac4690a57",
+  "height": 0,
+  "body": "7b2264617461223a2247656e6573697320426c6f636b227d",
+  "time": "1639442507",
+  "previousBlockHash": null
+}
+```
+
 - must use a POST call to requestValidation
+
+INFO: only legacy generated addresses can be signed with the bitcoin-core client.
+See [udacity knowlege base](https://knowledge.udacity.com/questions/722180).
+
+![Alt text](/bitcoin_core_rpc_console_getnewaddress_legacy.png?raw=true "bitcoin core rpc console getnewaddress legacy")
+
+```bash
+ curl -X POST localhost:8000/requestValidation -H 'Content-Type: application/json' -d '{"address":"n14JJrA5FVaU1phHFFMLfBhwsBh775TMKN"}'
+```
+
+```bash
+"n14JJrA5FVaU1phHFFMLfBhwsBh775TMKN:1639459274:starRegistry"
+```
+
 - must sign message with your wallet
+
+![Alt text](/click_to_sign_message.png?raw=true "click to sign message")
+
+![Alt text](/message_sign_unlock_wallet_with_passphrase.png?raw=true "message sign unlock wallet with passphrase")
+
+![Alt text](/message_signed.png?raw=true "message signed")
+
+Message signed returning this signature:
+
+```bash
+IOLYTuvRmsNZhR1AaRFIsKcUdUCQhmxDIJuq3a8f4ZLlAgfZizG5z2ohVmBHRcGMRdRODCYAw5mFrbdNUAOBrOY=
+```
+
 - must submit your Star
+
+```bash
+$ curl -X POST localhost:8000/submitStar -H 'Content-Type: application/json' -d @star.json
+```
+
+```bash
+{"hash":"65dd7a2015f358be570853424e3d97434051fc99a8a5c74d317b82f9b4dac91c","height":1,"body":"7b226f776e6572223a226e31344a4a724135465661553170684846464d4c66426877734268373735544d4b4e222c2273746172223a7b22646563223a223638c2b0203532272035362e39222c227261223a223136682032396d20312e3073222c2273746f7279223a2254657374696e67207468652073746f72792034227d7d","time":"1639463464","previousBlockHash":"628728e502bce709b6ee91a45239653508c3d4225dbf3fa0b2f31f4ac4690a57"}
+```
+
 - must use GET call to retrieve starts owned by a particular address
+
+```bash
+$ curl -v localhost:8000/blocks/n14JJrA5FVaU1phHFFMLfBhwsBh775TMKN
+*   Trying 127.0.0.1:8000...
+* TCP_NODELAY set
+* Connected to localhost (127.0.0.1) port 8000 (#0)
+> GET /blocks/n14JJrA5FVaU1phHFFMLfBhwsBh775TMKN HTTP/1.1
+> Host: localhost:8000
+> User-Agent: curl/7.68.0
+> Accept: */*
+>
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< X-Powered-By: Express
+< Content-Type: application/json; charset=utf-8
+< Content-Length: 131
+< ETag: W/"83-3WVayhc0pp3/tIzBBuJ0UUsGuyA"
+< Date: Tue, 14 Dec 2021 06:35:14 GMT
+< Connection: keep-alive
+< Keep-Alive: timeout=5
+<
+* Connection #0 to host localhost left intact
+```
+
+```bash
+$ cat curl_test_output.json | jq
+[
+  {
+    "owner": "n14JJrA5FVaU1phHFFMLfBhwsBh775TMKN",
+    "star": {
+      "dec": "68Â° 52' 56.9",
+      "ra": "16h 29m 1.0s",
+      "story": "Testing the story 4"
+    }
+  }
+]
+```
 
 ---
 
