@@ -1,5 +1,7 @@
 # Project Rubic
 
+---
+
 ## 1. Complete unfinished block.js implementation
 
 ### 1.1.1. Criteria
@@ -28,8 +30,6 @@ Modify the 'getBData()' function to return the block body (decoding the data)
 ---
 
 ## 2. Complete unfinished blockchain.js implementation
-
----
 
 ### 2.1.1. Criteria
 
@@ -90,6 +90,8 @@ Modify the 'validateChain()' function
 - Each Block should check with the previousBlockHash
 - execute the `validateChain()` function every time a block is added
 - create an endpoint that will trigger the execution of `validateChain()`
+
+---
 
 ## 3. Test your App functionality
 
