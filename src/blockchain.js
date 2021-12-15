@@ -83,7 +83,7 @@ class Blockchain {
       // or reject if an error happen during the execution
       if (self.chain[self.height] == block) {
         let validateChainResult = [];
-        validateChainResult = self.validateChain();
+        validateChainResult = await self.validateChain();
         if (validateChainResult.length == 0) {
           resolve(block);
         }
