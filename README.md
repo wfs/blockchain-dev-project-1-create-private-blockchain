@@ -121,6 +121,8 @@ Modify the 'validateChain()' function
 
 ![Alt text](/blockchainjs_validate_chain_function.png?raw=true "blockchain.js validate chain function")
 
+![Alt text](/blockchaincontrollerjs_constructor_plus_validatechain_endpoint.png?raw=true "blockchaincontroller.js constructor plus validatechain endpoint")
+
 ---
 
 ## 3. Test your App functionality
