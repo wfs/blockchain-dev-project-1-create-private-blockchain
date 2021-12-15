@@ -82,7 +82,11 @@ class Blockchain {
       // resolve with the block added
       // or reject if an error happen during the execution
       if (self.chain[self.height] == block) {
-        resolve(block);
+        let validateChainResult = [];
+        validateChainResult = self.validateChain();
+        if (validateChainResult.length == 0) {
+          resolve(block);
+        }
       } else {
         reject(Error("Unable to add block to chain."));
       }
@@ -132,10 +136,12 @@ class Blockchain {
       let time = parseInt(message.split(":")[1]);
 
       // 2. Get the current time: `let currentTime = parseInt(new Date().getTime().toString().slice(0, -3));`
+      // aka slice removes the milliseconds (last 3 digits), leaving currentTime == seconds since 00:00 1-Jan-1970.
       let currentTime = parseInt(new Date().getTime().toString().slice(0, -3));
 
-      // 3. Check if the time elapsed is less than 5 minutes
-      if (time > currentTime - 300000) {
+      // 3. Check if the time elapsed is less than 5 minutes (compare the time in the message and currentTime)
+      // aka 300 seconds == 5 minutes.
+      if (time > currentTime - 300) {
         // 4. Veify the message with wallet address and signature: `bitcoinMessage.verify(message, address, signature)`
         if (bitcoinMessage.verify(message, address, signature)) {
           let block = new BlockClass.Block({ owner: address, star: star });
@@ -166,6 +172,11 @@ class Blockchain {
       // Search on the chain array for the block that has the hash.
       // Use array.filter to get the block element.
       // See "Getting the user using filter" at https://www.educative.io/edpresso/filter-vs-find-javascript-array-methods
+      // ***
+      // Alternative suggestion from Project Reviewer:
+      // Filter returns the array based on the condition while find simply return the object that we expect to find in an array.
+      // Here, you can use find because only one block is returned instead of an array.
+      // ***
       let block = self.chain.filter((be) => be.hash === hash)[0];
       if (block) {
         resolve(block);
@@ -228,22 +239,24 @@ class Blockchain {
       // check if chain has more than just genesis block
       if (self.height > 0) {
         // iterate through chain over each block
-        for (var i = 1; i <= self.height; i++) {
+        for (var i = 0; i <= self.height; i++) {
           let block = self.chain[i];
           // 1. You should validate each block using `validateBlock`
           let validation = await block.validate();
           if (!validation) {
-            console.log("ERR: block data is invalid / tampered with.");
+            errorLog.push(
+              "ERR: block " + i.toString() + " in chain, it's data is invalid / tampered with.";
+            );
           }
           // 2. Each Block should check the with the previousBlockHash
-          else if (block.previousBlockHash != self.chain[i - 1].hash) {
-            console.log(
-              "ERR: current blocks previousBlockHash does not match hash stored in chains previous block."
+          else if (i > 0 && block.previousBlockHash != self.chain[i - 1].hash) {
+            errorLog.push(
+              "ERR: block " + i.toString() + " in chain, it's previousBlockHash attribuite does not match hash stored in chains previous block.";
             );
           }
         }
         // catch if errorLog has element
-        if (errorLog) {
+        if (errorLog.length > 0) {
           resolve(errorLog);
         } else {
           resolve("Chain validation success.");

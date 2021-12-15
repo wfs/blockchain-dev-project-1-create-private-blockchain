@@ -54,6 +54,23 @@ class Block {
         JSON.stringify(blockWithHashRemoved)
       ).toString();
 
+      /*
+        Alternative suggested by Project Reviewer:
+        You can clone the entire block using the spread operator provided by javascript.
+
+        For example -
+
+            // Recalculate the hash of the Block
+            const newHash = SHA256(JSON.stringify({...this, hash:null})).toString();
+
+            return this.hash === newHash;
+
+        The above method is another way to validate the block. ... spread operator will clone the original block and 
+        you can do anything with the cloned block but don't modify any property of the original block.
+        ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax#syntax
+
+      */
+
       // 4. Compare if the auxiliary hash value is different from the calculated one.
       // 5. Resolve true or false depending if it is valid or not.
       if (currentBlockHash != hashRecalculated) {
