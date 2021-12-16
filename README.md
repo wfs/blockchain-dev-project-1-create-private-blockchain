@@ -1,6 +1,20 @@
-# Overview
+# Scope and Dependencies
 
 ---
+
+![Alt text](/overview_blockchain_framework.png?raw=true "overview blockchain framework")
+
+![Alt text](/overview_transactions.png?raw=true "overview transactions")
+
+![Alt text](/overview_wallet_of_addresses.png?raw=true "overview wallet of addresses")
+
+![Alt text](/overview_signing_a_transaction.png?raw=true "overview signing a transaction")
+
+![Alt text](/overview_block_hashing.png?raw=true "overview block hashing")
+
+![Alt text](/overview_blocks_transactions.png?raw=true "overview blocks transactions")
+
+![Alt text](/overview_blockchain_hash.png?raw=true "overview blockchain hash")
 
 ![Alt text](/dependency-graph-html-unhighlighted.png?raw=true "dependency graph html unhighlighted")
 
